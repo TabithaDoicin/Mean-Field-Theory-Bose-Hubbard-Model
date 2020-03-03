@@ -4,6 +4,7 @@ Created on Mon Mar  2 23:18:43 2020
 
 @author: anton
 """
+#!usr/bin/python
 
 from quspin.operators import hamiltonian # Hamiltonians and operators
 from quspin.basis import boson_basis_general # bosonic Hilbert space
