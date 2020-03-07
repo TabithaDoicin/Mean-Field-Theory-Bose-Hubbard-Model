@@ -23,9 +23,9 @@ L = Length of chain (currently not in use)
 #initialisation of system
 
 EXAMPLE:
-
+##
 s = SPSystem(U = 1, z = 4, max_p = 6, L = 1) 
-
+##
 's' is the system name in this case, 'SPSystem' is the name of the object
 
 #simulation parameters, and calling the simulation method#
@@ -47,7 +47,7 @@ ymin, ymax, ysteps = similar to x case
 #simulation of system (includes mechanism for plotting phase diagram)
 
 EXAMPLE:
-
+##
 simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
          ymin = 0, ymax = 3, ysteps = 50) #calling simulate function, does calculations
-
+##
