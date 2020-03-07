@@ -25,8 +25,8 @@ s = SPSystem(U = 1, z = 4, max_p = 6, L = 1)
 
 #simulation parameters, and calling the simulation method#
 ~system = s #name of system (a variable in the simulation method)
->x = t/U<
->y = mu/U<
+x = t/U
+y = mu/U
 ~xmin = minimum value of x
 ~xmax = maximum value of y
 ~xsteps = resolution of diagram in the x direction
