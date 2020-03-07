@@ -5,8 +5,8 @@ Simple Mean-field theory simulation of the Bose-Hubbard model with the aim of ca
 
 ~Requires Quspin
 
-~~(It is easiest to get Anaconda, update it thoroughly, and install Quspin and all its own dependencies automatically
-using the info here: https://anaconda.org/weinbe58/quspin)~~
+~(It is easiest to get Anaconda, update it thoroughly, and install Quspin and all its own dependencies automatically
+using the info here: https://anaconda.org/weinbe58/quspin)~
 
 ###USAGE###
 
