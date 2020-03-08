@@ -65,5 +65,5 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     
 ###USAGE###x=t/U##y=mu/U##
 s = SPSystem(U = 1, z = 4, max_p = 8) #initialise base system parameters
-simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 20, 
-         ymin = 0, ymax = 4, ysteps = 20) #calling simulate function, does calculations
+simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
+         ymin = 0, ymax = 4, ysteps = 50) #calling simulate function, does calculations
