@@ -48,12 +48,12 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     ti = np.linspace(xmin, xmax, xsteps)
     mui = np.linspace(ymin, ymax, ysteps)
     psimat = np.zeros((ysteps, xsteps))
-    for y in range(xsteps):
-        t = ti[y]
-        print('progress: ' + str(round(y/xsteps * 100, 4)) + '%')
-        for x in range(ysteps):
-            mu = mui[x]
-            psimat[x, y]=np.abs(system.minimize_gs(t, mu))
+    for x in range(xsteps):
+        t = ti[x]
+        print('progress: ' + str(round(x/xsteps * 100, 4)) + '%')
+        for y in range(ysteps):
+            mu = mui[y]
+            psimat[y, x]=np.abs(system.minimize_gs(t, mu))
     elapsed_time = time.time() - start_time
     fig, ax = plt.subplots()
     im = ax.imshow(psimat, origin = 'lower', extent=(xmin,xmax,ymin,ymax), aspect = 'auto')
@@ -65,5 +65,5 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     
 ###USAGE###x=t/U##y=mu/U##
 s = SPSystem(U = 1, z = 4, max_p = 6) #initialise base system parameters
-simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
-         ymin = 0, ymax = 3, ysteps = 50) #calling simulate function, does calculations
+simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 20, 
+         ymin = 0, ymax = 3, ysteps = 20) #calling simulate function, does calculations
