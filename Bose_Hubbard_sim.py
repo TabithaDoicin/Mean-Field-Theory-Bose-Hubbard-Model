@@ -44,10 +44,10 @@ class SPSystem:
             return self.gs_energy(self.construct_h(t, mu, psi))
         return minimize_scalar(gs_min_energy).x
  
-def multiboi(xmt_min, xmt_max, system): #xmt_min, xmt_max as matrix elements
+def populate(xmt_min, xmt_max, system): #xmt_min, xmt_max as matrix elements
     for x in range(xmt_min, xmt_max):
         t = ti[x]
-        print('progress: ' + str(round(x/(xmt_max-xmt_min) * 100, 4)) + '%')
+        #print('progress: ' + str(round(x/(xmt_max-xmt_min) * 100, 4)) + '%')
         for y in range(y_num):
             mu = mui[y]
             psimat[y, x]=np.abs(system.minimize_gs(t, mu))
@@ -78,16 +78,16 @@ def simulate(number_of_processes, system, xmin, xmax, xsteps, ymin, ymax, ysteps
         else:
             xmt_min_array.append(xmt_max_array[i-1]+1)
             xmt_max_array.append(xmt_min_array[i] + (bpp-1) + extra)
-    if __name__ == '__main__':        
-        for i in range(number_of_processes):
-            p = mp.Process(target = multiboi, args = (xmt_min_array[i], xmt_max_array[i], system))
-            print('boop2')
-            p.start()
-            print('boop1')
-            processes.append(p)
-        for process in processes:
-            print('boop')
-            process.join()
+            
+    for i in range(number_of_processes):
+        p = mp.Process(target = populate, args = (xmt_min_array[i], xmt_max_array[i], system,))
+        print('starting process ' + str(p))
+        p.start()
+        processes.append(p)
+        
+    for process in processes:
+        process.join()
+        print('ending process ' + str(process))
         
     elapsed_time = time.time() - start_time
     fig, ax = plt.subplots()
@@ -99,6 +99,7 @@ def simulate(number_of_processes, system, xmin, xmax, xsteps, ymin, ymax, ysteps
     print('Time elapsed: ' + str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
     
 ###USAGE###x=t/U##y=mu/U##
-s = SPSystem(U = 1, z = 4, max_p = 6) #initialise base system parameters
-simulate(number_of_processes = 4, system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
-         ymin = 0, ymax = 3, ysteps = 50) #calling simulate function, does calculations
+if __name__ == '__main__':  
+    s = SPSystem(U = 1, z = 4, max_p = 6) #initialise base system parameters
+    simulate(number_of_processes = 4, system = s, xmin = 0, xmax = 0.05, xsteps = 1000, 
+             ymin = 0, ymax = 3, ysteps = 1000) #calling simulate function, does calculations
