@@ -64,6 +64,6 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     print('Time elapsed: ' + str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
     
 ###USAGE###x=t/U##y=mu/U##
-s = SPSystem(U = 1, z = 4, max_p = 6, L = 1) #initialise base system parameters
+s = SPSystem(U = 1, z = 4, max_p = 6) #initialise base system parameters
 simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
          ymin = 0, ymax = 3, ysteps = 50) #calling simulate function, does calculations
