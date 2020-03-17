@@ -55,13 +55,13 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
             mu = mui[y]
             psimat[y, x]=np.abs(system.minimize_gs(t, mu))
     elapsed_time = time.time() - start_time
+    print('Time elapsed: ' + str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
     fig, ax = plt.subplots()
     im = ax.imshow(psimat, origin = 'lower', extent=(xmin,xmax,ymin,ymax), aspect = 'auto')
     cb = plt.colorbar(im)
     cb.set_label(r'$\Psi$', size=15)
     ax.set_xlabel(r'$t/U$', fontsize=15)
     ax.set_ylabel(r'$\mu/U$', fontsize=15)
-    print('Time elapsed: ' + str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
     
 s = SPSystem(U = 1, z = 4, max_p = 10) #initialise base system parameters
 simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
