@@ -14,21 +14,28 @@ import numpy as np #generic numpy stuff
 import matplotlib.pyplot as plt#plotting stuff
 import time#timer for timing
 
-class SPSystem:
+class SPSystem:   #1d only 
     
-    def __init__(self, U, z, max_p):
+    def __init__(self, U, z, max_p, L):
         self.U = U
         self.z = z
-        self.L = 1
+        self.L = L
         self.basis = boson_basis_general(self.L, sps = max_p+1)
+        self.local_z = [self.z for i in range(self.L)]
+        self.local_z[0] = self.local_z[0] + 1
+        self.local_z[self.L-1] = self.local_z[self.L-1] + 1
     
     def construct_h(self, t, mu, psi):
         potential = [[-mu-self.U/2, i] for i in range(self.L)]
         interaction = [[self.U/2, i, i] for i in range(self.L)]
-        hopping_1 = [[-self.z*t*psi.conjugate(), i] for i in range(self.L)]
-        hopping_2 = [[-self.z*t*psi, i] for i in range(self.L)]
-        extra = [[self.z*t*np.abs(psi)**2, i] for i in range(self.L)]
+        hopping_1 = [[-self.local_z[i]*t*psi.conjugate(), i] for i in range(self.L)]
+        hopping_2 = [[-self.local_z[i]*t*psi, i] for i in range(self.L)]
+        extra = [[self.local_z[i]*t*np.abs(psi)**2, i] for i in range(self.L)]
         static = [["n", potential], ["nn", interaction], ["-", hopping_1], ["+", hopping_2], ["I", extra]]
+        if self.L>=1:
+            hop = [[-t,i,i+1] for i in range(self.L-1)]
+            static.append(["+-",hop])
+            static.append(["-+",hop])
         dynamic = []
         H = h_construct(static, dynamic, basis = self.basis, dtype = np.complex128, 
                      check_symm = False, check_herm = False, check_pcon = False)
@@ -63,6 +70,6 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     ax.set_xlabel(r'$t/U$', fontsize=15)
     ax.set_ylabel(r'$\mu/U$', fontsize=15)
     
-s = SPSystem(U = 1, z = 4, max_p = 10) #initialise base system parameters
-simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
-         ymin = 0, ymax = 4, ysteps = 50) #calling simulate function, does calculations
+s = SPSystem(U = 1, z = 2, max_p = 3, L = 1) #initialise base system parameters/ z = number of nearest neighbours
+simulate(system = s, xmin = 0, xmax = 0.06, xsteps = 50, 
+         ymin = 0, ymax = 1, ysteps = 50) #calling simulate function, does calculations
