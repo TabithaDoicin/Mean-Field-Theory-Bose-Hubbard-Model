@@ -14,16 +14,16 @@ import numpy as np #generic numpy stuff
 import matplotlib.pyplot as plt#plotting stuff
 import time#timer for timing
 
-class SPSystem:   #1d only 
+class System_1D:   #1d only 
     
     def __init__(self, U, z, max_p, L):
         self.U = U
-        self.z = z
+        self.z = z - 2 #2 for 1d only!!!
         self.L = L
         self.basis = boson_basis_general(self.L, sps = max_p+1)
         self.local_z = [self.z for i in range(self.L)]
-        #self.local_z[0] = self.local_z[0] + 1
-        #self.local_z[self.L-1] = self.local_z[self.L-1] + 1
+        self.local_z[0] = self.local_z[0] + 1
+        self.local_z[self.L-1] = self.local_z[self.L-1] + 1
     
     def construct_h(self, t, mu, psi):
         potential = [[-mu-self.U/2, i] for i in range(self.L)]
@@ -54,7 +54,6 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
     start_time = time.time()
     ti = np.linspace(xmin, xmax, xsteps)
     mui = np.linspace(ymin, ymax, ysteps)
-    global psimat
     psimat = np.zeros((ysteps, xsteps))
     for x in range(xsteps):
         t = ti[x]
@@ -63,34 +62,43 @@ def simulate(system, xmin, xmax, xsteps, ymin, ymax, ysteps):
             mu = mui[y]
             psimat[y, x]=np.abs(system.minimize_gs(t, mu))
     elapsed_time = time.time() - start_time
+    return psimat
     print('Time elapsed: ' + str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
 
 
 U = 1
 z = 4
 max_p = 2
-L = 1
-xmin = 0.01
+L=4
+xmin = 0.035
 xmax = 0.06
-xsteps = 20
-ymin = 0
-ymax = 1
-ysteps = 20
+xsteps = 85
+ymin = 0.42
+ymax = 0.42
+ysteps = 1
 
-s = SPSystem(U, z, max_p, L) #initialise base system parameters/ z = number of nearest neighbours
-simulate(s, xmin, xmax, xsteps, 
+s1 = System_1D(U, z, max_p, 1) #initialise base system parameters/ z = number of nearest neighbours
+solution1 = simulate(s1, xmin, xmax, xsteps, 
          ymin, ymax, ysteps) #calling simulate function, does calculations
+s2 = System_1D(U, z, max_p, 2) #initialise base system parameters/ z = number of nearest neighbours
+solution2 = simulate(s2, xmin, xmax, xsteps, ymin, ymax, ysteps) #calling simulate function, does calculations
+s3 = System_1D(U, z, max_p, 4) #initialise base system parameters/ z = number of nearest neighbours
+solution3 = simulate(s3, xmin, xmax, xsteps, ymin, ymax, ysteps) #calling simulate function, does calculations
+s4 = System_1D(U, z, max_p, 6) #initialise base system parameters/ z = number of nearest neighbours
+solution4 = simulate(s4, xmin, xmax, xsteps, ymin, ymax, ysteps) #calling simulate function, does calculations
 
-
-fig, ax = plt.subplots()
-im = ax.imshow(psimat, origin = 'lower', extent=(xmin,xmax,ymin,ymax), aspect = 'auto')
-cb = plt.colorbar(im)
-cb.set_label(r'$\Psi$', size=15)
-ax.set_xlabel(r'$t/U$', fontsize=15)
-ax.set_ylabel(r'$\mu/U$', fontsize=15)
+#fig, ax = plt.subplots()
+#im = ax.imshow(solution, origin = 'lower', extent=(xmin,xmax,ymin,ymax), aspect = 'auto')
+#cb = plt.colorbar(im)
+#cb.set_label(r'$\Psi$', size=15)
+#ax.set_xlabel(r'$t/U$', fontsize=15)
+#ax.set_ylabel(r'$\mu/U$', fontsize=15)
 
 fig1,ax1 = plt.subplots()
 ti = np.linspace(xmin,xmax,xsteps)
-ax1.scatter(ti,psimat[int(round(ysteps/2)),:])
-ax1.scatter(ti,psimat[int(round(ysteps/4)),:])
-ax1.scatter(ti,psimat[int(round(3*ysteps/4)),:])
+ax1.scatter(ti,solution1[int(round(0)),:], marker = 'x', c = 'r', s = 2)
+ax1.scatter(ti,solution2[int(round(0)),:], marker = 'x', c = 'b', s=2)
+ax1.scatter(ti,solution3[int(round(0)),:], marker = 'x', c='k', s=2)
+ax1.scatter(ti,solution4[int(round(0)),:], marker = 'x', c='m', s=2)
+ax1.set_xlabel(r'$t/U$', fontsize=15)
+ax1.set_ylabel(r'$\Psi$', fontsize=15)
