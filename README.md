@@ -51,3 +51,4 @@ EXAMPLE:
 simulate(system = s, xmin = 0, xmax = 0.05, xsteps = 50, 
          ymin = 0, ymax = 3, ysteps = 50) #calling simulate function, does calculations
 ##
+![example_output_2_800_800_1_4_8](https://github.com/user-attachments/assets/87ad6756-0c3e-4c57-8afe-829090f04975)
